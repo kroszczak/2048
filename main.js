@@ -14,26 +14,27 @@ function GetFreeIndex(){ return Free.findIndex((v) => { return v != ''; })}
 function GetRandomVal(){ return Math.random() > 0.49 ? 2 : 4;}
 function GetRandomCell(){
 
-    let elements = [];
+    let freeElements = [];
     let counter = 0;
     let random = Math.random();
 
     cells.forEach((item, index) =>{
         if(item === ''){
-            elements.push(index);
+            freeElements.push(index);
             counter++;
         }})
 
     let przedzial = 1/counter;
     for(let i = 1; i <= counter; i++)
     {
-        if(random <= przedzial * i) return elements[i-1];
+        if(random <= przedzial * i) return freeElements[i-1];
     }
 }
 
- function CreateNewTile(){
-    return eval(`let tile${GetFreeIndex()} = new tile(GetRandomCell(), GetFreeIndex(), GetRandomVal())`);
+ function CreateNewTile(x){
+    return eval(`tile${x} = new tile(GetRandomCell(), x, GetRandomVal());`);
  }
+ 
 
 //let tile1 = new tile(GRP(), GFN(), GRV());
 
