@@ -1,21 +1,23 @@
-
 let space = document.querySelectorAll('.tile');
-let Free = [0, 1 ,2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-let cells = ['' ,'' ,'', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+let counter;
+const una = [];
+const Free = [true, true ,true, true, true, true, true, true, true, true, true, true, true, true, true, true];
+const cells = ['' ,'' ,'', '', '', '', '', '', '', '', '', '', '', '', '', ''];
 class tile {
-   constructor(cell, number, value) {
+    constructor(cell, number, value) {
         this.cell = cell;
         this.number = number; 
         this.value = value;
-   }
+    }
 };
 
-function GetFreeIndex(){ return Free.findIndex((v) => { return v != ''; })}
-function GetRandomVal(){ return Math.random() > 0.49 ? 2 : 4;}
+
+function GetFreeIndex(){ return Free.findIndex((v) => { return v != false; })}
+function GetRandomVal(){ return Math.random() > 0.24 ? 2 : 4;}
 function GetRandomCell(){
 
     let freeElements = [];
-    let counter = 0;
+    counter = 0;
     let random = Math.random();
 
     cells.forEach((item, index) =>{
@@ -23,21 +25,50 @@ function GetRandomCell(){
             freeElements.push(index);
             counter++;
         }})
+        console.log(freeElements);
         
-        if(freeElements === []) return -1;
+        if(counter == 0) return -1;
 
     let przedzial = 1/counter;
     for(let i = 1; i <= counter; i++)
     {
-        if(random <= przedzial * i) return freeElements[i-1];
+        if(random <= przedzial * i) {cells[freeElements[i-1]] = freeElements[i-1]; return freeElements[i-1];}
     }
 }
-console.log(GetRandomCell());
 
- function CreateNewTile(x){
-    return eval(`tile${x} = new tile(GetRandomCell(), x, GetRandomVal());`);
+ function CreateNewTile(){
+    let index = GetFreeIndex(Free);
+    una.push(index);
+    console.log(una);
+    Free[index] = false;
+    return eval(`tile${index} = new tile(GetRandomCell(cells), index , GetRandomVal());`);
+ 
  }
  
+function display(){
+    for(let i = 0; i < (16 - (counter - 1)); i++){
+    eval(`space[tile${una[i]}.cell].innerHTML = tile${una[i]}.value`);console.log('sds');}
+}
+//GAME FLOW
+
+
+//generuje tile
+//wyswietla go na ekranie
+//ruch gracza i modyfikacja obkiektów
+//sprawdzanie czy ruch jest dozwolony i czy jakis ruch jest mozliwy
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////
+
 
 //let tile1 = new tile(GRP(), GFN(), GRV());
 
