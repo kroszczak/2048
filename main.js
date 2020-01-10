@@ -23,6 +23,8 @@ function GetRandomCell(){
             freeElements.push(index);
             counter++;
         }})
+        
+        if(freeElements === []) return -1;
 
     let przedzial = 1/counter;
     for(let i = 1; i <= counter; i++)
@@ -30,6 +32,7 @@ function GetRandomCell(){
         if(random <= przedzial * i) return freeElements[i-1];
     }
 }
+console.log(GetRandomCell());
 
  function CreateNewTile(x){
     return eval(`tile${x} = new tile(GetRandomCell(), x, GetRandomVal());`);
