@@ -6,7 +6,7 @@ body{
     color: white;
     /* font-family: 'Lato', sans-serif; */
     font-weight: 700;
-    font-size: 7rem;
+    font-size: 5rem;
 }
 
 nav{
@@ -29,6 +29,7 @@ nav{
 }
 
 .tile{
+    font-size: auto;    
     border-radius: 10%;
     display: flex;
     justify-content: center;

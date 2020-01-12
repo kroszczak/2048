@@ -1,24 +1,17 @@
+let x, m;
+let colors = ['a38a8a', '9e6868', '593a3a', 'bf7e7e', '6b2727' ,'#3a2222', '6d6262', '#543a3a', '#2b2724','1c1111'];
 let tiles = document.querySelectorAll('.tile');
-const Free = [true, true ,true, true, true, true, true, true, true, true, true, true, true, true, true, true];
-const cells = []; 
-for(let i = 0; i < 16; i++) cells.push('');
+const board = []; for(let i = 0; i < 16; i++) board.push('');
 
-class tile {
-    constructor(cell, number, value) {
-        this.cell = cell;
-        this.number = number; 
-        this.val = value;}};
+CreateNewTile();
+display();
 
-
-
-function GetFreeIndex(){ return Free.findIndex((v) => { return v != false; })}
-function GetRandomVal(){ return Math.random() > 0.24 ? 2 : 4;}
 function GetRandomCell(){
     let freeCells = [];
     let counter = 0;
     let random = Math.random();
 
-    cells.forEach((item, index) =>{
+    board.forEach((item, index) =>{
         if(item === ''){
             freeCells.push(index);
             counter++;}})
@@ -27,60 +20,125 @@ function GetRandomCell(){
     for(let i = 1; i <= counter; i++){
         if(random <= przedzial * i) {; return freeCells[i-1];}}}
 
+function GetRandomVal(){ return Math.random() > 0.1 ? 2 : 4;}
 
- function CreateNewTile(){
+function CreateNewTile(){
     let cell = GetRandomCell()
-    let index = GetFreeIndex();
-    Free[index] = false;
-    eval(`tile${index} = new tile(cell, index , GetRandomVal());`);
-    eval(`cells[tile${index}.cell] = tile${index};`);}
- 
+    board[cell] = GetRandomVal()}
+
+function display(){
+    let n = 1, y = 2;
+    for(let i = 0; i < 16; i++){
+        tiles[i].innerHTML = board[i];
+        x = board[i];
+        do{
+            y = Math.pow(y, n);
+            if(x == y) tiles[i].style.backgroundColor = colors[n-1];
+            n++;
+        }while(y != x && x != '')}
+    }
+
+
 
  document.addEventListener('keydown', (k) =>{
 
+    x = 0;
+    m = 0;
     if(k.keyCode == 40){
-        for(i = 15; i >= 12; i--){
-            if( (cells[i].val === cells[i -4].val) && (cells[i] != '') ){
-                console.log('kul');
-                cells[i].val *= 2;
-                cells[i -4] = '';
-                Free[cells[i -4].number] = true;}
-            if( (cells[i - 4].val === cells[i -8].val) && (cells[i - 4] != '') ){
-                console.log('kul2');
-                cells[i-4].val *= 2;
-                cells[i -8].val = null;
-                Free[cells[i -8].number] = true;}
-            if( (cells[i -8].val === cells[i -12].val) && (cells[i-8] != '') ){
-                console.log('kul3');
-                cells[i-8].val *= 2;
-                cells[i -12].val = null
-                Free[cells[i -12].number] = true;;
-            }}}
+        console.log("down");
+        for(let i = 15; i >= 12; i--){
+            if(board[i-4] != ''){
+                if(board[i] == ''){ board[i] = board[i-4]; board[i-4] = ''; m=1;} 
+                else if(board[i] == board[i-4]){
+                    board[i] *= 2; board[i-4] = ''; x = 1;m=1;}}
+
+            if(board[i-8] != ''){        
+                if(board[i-4] == ''){ board[i-4] = board[i-8]; board[i-8] = '';m=1;
+                    if(board[i] == ''){ board[i] = board[i-4]; board[i-4] = '';m=1;}
+                    else if(board[i] == board[i -4] && x != 1){
+                        board[i] *= 2; board[i -4] = ''; x = 1;m=1;m=1;}}
+                else if(board[i-4] == board[i-8]){board[i-4] *= 2; board[i-8] = ''; x = 2;m=1;m=1;}}
+
+            if(board[i-12] != ''){
+                if(board[i-8] == ''){ board[i-8] = board[i-12]; board[i-12] ='';m=1;
+                    if(board[i-4] == ''){ board[i-4] = board[i-8]; board[i-8] ='';m=1;
+                        if(board[i] == ''){board[i] = board[i-4]; board[i-4] ='';m=1;}
+                        else if(board[i] == board[i-4] && x != 1){board[i] *= 2; board[i-4] = '';m=1;}}
+                    else if( board[i-8] == board[i-4] && x != 2) {board[i-4] *= 2; board[i-8]= '';m=1;}}
+                else if(board[i-8] == board[i-12]){board[i-8] *= 2; board[i-12] = '';m=1;}}}}
 
 
-    if(k.keyCode == 38) console.log("góra");
-    if(k.keyCode == 37) console.log("lewo");
-    if(k.keyCode == 39) console.log("prawo");
+    if(k.keyCode == 38){
+        console.log("up");
+        for(let i = 0; i < 4; i++){
+            if(board[i+4] != ''){
+                if(board[i] == ''){ board[i] = board[i+4]; board[i+4] = ''; console.log("dziala"); m=1;} 
+                else if(board[i] == board[i+4]){
+                    board[i] *= 2; board[i+4] = ''; x = 1; m=1;}}
 
+            if(board[i+8] != ''){
+                if(board[i+4] == ''){ board[i+4] = board[i+8]; board[i+8] = ''; m=1;;
+                    if(board[i] == ''){ board[i] = board[i+4]; board[i+4] = ''; m=1;}
+                    else if(board[i] == board[i+4] && x != 1){
+                        board[i] *= 2; board[i+4] = ''; x = 1; m=1;}}
+                else if(board[i+4] == board[i+8]){board[i+4] *= 2; board[i+8] = ''; x = 2; m=1;}}
 
+            if(board[i+12] != ''){
+                if(board[i+8] == ''){ board[i+8] = board[i+12]; board[i+12] =''; m=1;
+                    if(board[i+4] == ''){ board[i+4] = board[i+8]; board[i+8] =''; m=1;
+                        if(board[i] == ''){board[i] = board[i+4]; board[i+4] =''; m=1;}
+                        else if(board[i] == board[i+4] && x != 1){board[i] *= 2; board[i+4] = ''; m=1;}}
+                    else if( board[i+8] == board[i+4] && x != 2) {board[i+4] *= 2; board[i+8]= ''; m=1;}}
+                else if(board[i+8] == board[i+12]){board[i+8] *= 2; board[i+12] = ''; m=1;}}}}
+
+    if(k.keyCode == 39){ 
+        console.log("lewo");
+        for(let i = 3; i < 16; i += 4){
+            if(board[i-1] != ''){
+                if(board[i] == ''){ board[i] = board[i-1]; board[i-1] = ''; m=1;} 
+                else if(board[i] == board[i-1]){
+                    board[i] *= 2; board[i-1] = ''; x = 1; m=1;}}
+
+            if(board[i-2] != ''){
+                if(board[i-1] == ''){ board[i-1] = board[i-2]; board[i-2] = ''; m=1;;
+                    if(board[i] == ''){ board[i] = board[i-1]; board[i-1] = ''; m=1;}
+                    else if(board[i] == board[i-1] && x != 1){
+                        board[i] *= 2; board[i-1] = ''; x = 1; m=1;}}
+                else if(board[i-1] == board[i-2]){board[i-1] *= 2; board[i-2] = ''; x = 2; m=1;}}
+
+            if(board[i-3] != ''){
+                if(board[i-2] == ''){ board[i-2] = board[i-3]; board[i-3] =''; m=1;
+                    if(board[i-1] == ''){ board[i-1] = board[i-2]; board[i-2] =''; m=1;
+                        if(board[i] == ''){board[i] = board[i-1]; board[i-1] =''; m=1;}
+                        else if(board[i] == board[i-1] && x != 1){board[i] *= 2; board[i-1] = ''; m=1;}}
+                    else if( board[i-2] == board[i-1] && x != 2) {board[i-1] *= 2; board[i-2]= ''; m=1;}}
+                else if(board[i-2] == board[i-3]){board[i-2] *= 2; board[i-3] = ''; m=1;}}}}
+
+    if(k.keyCode == 37){ 
+        console.log("prawo");
+        for(let i = 0; i <= 12; i += 4){
+            if(board[i+1] != ''){
+                if(board[i] == ''){ board[i] = board[i+1]; board[i+1] = ''; m=1;} 
+                else if(board[i] == board[i+1]){
+                    board[i] *= 2; board[i+1] = ''; x = 1; m=1;}}
+
+            if(board[i+2] != ''){
+                if(board[i+1] == ''){ board[i+1] = board[i+2]; board[i+2] = ''; m=1;;
+                    if(board[i] == ''){ board[i] = board[i+1]; board[i+1] = ''; m=1;}
+                    else if(board[i] == board[i+1] && x != 1){
+                        board[i] *= 2; board[i+1] = ''; x = 1; m=1;}}
+                else if(board[i+1] == board[i+2]){board[i+1] *= 2; board[i+2] = ''; x = 2; m=1;}}
+
+            if(board[i+3] != ''){
+                if(board[i+2] == ''){ board[i+2] = board[i+3]; board[i+3] =''; m=1;
+                    if(board[i+1] == ''){ board[i+1] = board[i+2]; board[i+2] =''; m=1;
+                        if(board[i] == ''){board[i] = board[i+1]; board[i+1] =''; m=1;}
+                        else if(board[i] == board[i+1] && x != 1){board[i] *= 2; board[i+1] = ''; m=1;}}
+                    else if( board[i+2] == board[i+1] && x != 2) {board[i+1] *= 2; board[i+2]= ''; m=1;}}
+                else if(board[i+2] == board[i+3]){board[i+2] *= 2; board[i+3] = ''; m=1;}}}}
+
+    if(m == 1){ CreateNewTile();    display();}
+ 
  })
 
-function display(){
-    for(let i in Free)
-    if(Free[i] != true) eval(`tiles[tile${i}.cell].innerHTML = tile${i}.val;`);}
 
-
- function KeyDown(){
-
-
- }
-//GAME FLOW
-
-//DONE
-//generuje tile
-//wyswietla go na ekranie
-
-
-//ruch gracza i modyfikacja obkiektów
-//sprawdzanie czy ruch jest dozwolony i czy jakis ruch jest mozliwy
-//kolorki qrwa
