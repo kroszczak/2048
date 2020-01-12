@@ -1,11 +1,10 @@
 let x, m;
-let colors = ['a38a8a', '9e6868', '593a3a', 'bf7e7e', '6b2727' ,'#3a2222', '6d6262', '#543a3a', '#2b2724','1c1111'];
+let colors = ['#a38a8a', '#9e6868', '#593a3a', '#bf7e7e', '#6b2727' ,'#3a2222', '#6d6262', '#543a3a', '#2b2724','#1c1111'];
 let tiles = document.querySelectorAll('.tile');
 const board = []; for(let i = 0; i < 16; i++) board.push('');
 
 CreateNewTile();
 display();
-
 function GetRandomCell(){
     let freeCells = [];
     let counter = 0;
@@ -30,12 +29,7 @@ function display(){
     let n = 1, y = 2;
     for(let i = 0; i < 16; i++){
         tiles[i].innerHTML = board[i];
-        x = board[i];
-        do{
-            y = Math.pow(y, n);
-            if(x == y) tiles[i].style.backgroundColor = colors[n-1];
-            n++;
-        }while(y != x && x != '')}
+        board[i] == '' ? tiles[i].style.backgroundColor = "#ccc": board[i] == 2 ? tiles[i].style.backgroundColor = colors[0] : board[i] == 4 ? tiles[i].style.backgroundColor = colors[1]: board[i] == 8 ? tiles[i].style.backgroundColor = colors[2]: board[i] == 16 ? tiles[i].style.backgroundColor = colors[3]: board[i] == 32 ? tiles[i].style.backgroundColor = colors[4]: board[i] == 64 ? tiles[i].style.backgroundColor = colors[5]: board[i] == 128 ? tiles[i].style.backgroundColor = colors[6]: board[i] == 256 ? tiles[i].style.backgroundColor = colors[7]: board[i] == 512 ? tiles[i].style.backgroundColor = colors[8]: board[i] == 1024 ? tiles[i].style.backgroundColor = colors[9]: board[i] == 2048 ? tiles[i].style.backgroundColor = colors[10]: board[i] == 4096 ? tiles[i].style.backgroundColor = colors[11]: tiles[i].style.backgroundColor = colors[12]}
     }
 
 
